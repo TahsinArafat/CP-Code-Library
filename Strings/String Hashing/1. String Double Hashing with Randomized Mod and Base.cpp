@@ -28,10 +28,10 @@ struct Hash {
     ll p1 = 31, p2 = 37;
     ll invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
     vector<pair<ll, ll>> sHash, pPow, invpPow;
-    void setVal(string& S) {
+    void setVal(string& S) { // Set the string
         s = S, n = S.size();
     }
-    void randomPMOD() {
+    void randomize() { // Randomize the mod and base
         p1 = rnd() % 100 + 31, p2 = rnd() % 100 + 37;
         while (!isPrime(p1)) p1++;
         while (!isPrime(p2) || p1 == p2) p2++;
@@ -40,7 +40,7 @@ struct Hash {
         while (!isPrime(mod1)) mod1++;        
         while (!isPrime(mod2) || mod1 == mod2) mod2++;
     }
-    void genP() {
+    void genP() { // Generate powers of p and invp for faster queries
         pPow.resize(n + 1, {1, 1});
         invpPow.resize(n + 1, {1, 1});
         for (int i = 1; i <= n; i++) {
@@ -50,19 +50,19 @@ struct Hash {
             invpPow[i].yy = invpPow[i - 1].yy * invp2 % mod2;
         }
     }
-    void genHash() {
+    void genHash() { // 0-indexed
         sHash.resize(n + 1, {0, 0});
         for (int i = 0; i < n; i++) {
             sHash[i + 1].xx = (sHash[i].xx + (s[i] - 'a' + 1) * pPow[i].xx) % mod1;
             sHash[i + 1].yy = (sHash[i].yy + (s[i] - 'a' + 1) * pPow[i].yy) % mod2;
         }
     }
-    pair<ll, ll> getHash(int l, int r) {
+    pair<ll, ll> getHash(int l, int r) { // 0-indexed
         ll h1 = (sHash[r + 1].xx - sHash[l].xx + mod1) % mod1 * invpPow[l].xx % mod1;
         ll h2 = (sHash[r + 1].yy - sHash[l].yy + mod2) % mod2 * invpPow[l].yy % mod2;
         return {h1, h2};
     }
-    pair<ll, ll> getHash() {
+    pair<ll, ll> getHash() { // Get the hash of the whole string
         return getHash(0, n - 1);
     }
 };
@@ -74,7 +74,7 @@ int32_t main()
     cin >> s;
     Hash h; // Create a hash object
     h.setVal(s); // Set the string
-    h.randomPMOD(); // Randomize the mod and base
+    h.randomize(); // Randomize the mod and base
     h.genP(); // Generate the powers
     h.genHash(); // Generate the hash
     cout << h.getHash().xx << ' ' << h.getHash().yy << '\n'; // Get the hash of the whole string
