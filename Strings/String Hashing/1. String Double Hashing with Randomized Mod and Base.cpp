@@ -65,6 +65,9 @@ struct Hash {
     pair<ll, ll> getHash() { // Get the hash of the whole string
         return getHash(0, n - 1);
     }
+    void doAll(string& S) {
+        setVal(S), randomize(), genP(), genHash();
+    }
 };
 
 int32_t main()
@@ -73,10 +76,11 @@ int32_t main()
     string s;
     cin >> s;
     Hash h; // Create a hash object
-    h.setVal(s); // Set the string
-    h.randomize(); // Randomize the mod and base
-    h.genP(); // Generate the powers
-    h.genHash(); // Generate the hash
+    // h.setVal(s); // Set the string
+    // h.randomize(); // Randomize the mod and base
+    // h.genP(); // Generate the powers
+    // h.genHash(); // Generate the hash
+    h.doAll(s);
     cout << h.getHash().xx << ' ' << h.getHash().yy << '\n'; // Get the hash of the whole string
     return 0;    
 }
