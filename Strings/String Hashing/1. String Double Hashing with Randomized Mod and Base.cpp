@@ -22,6 +22,7 @@ bool isPrime(ll n) {
     return true;
 }
 ll mod1 = 127657753, mod2 = 987654319, p1 = 31, p2 = 37;
+ll invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
 void randomize() { // Randomize the mod and base
     mod1 = rnd() % 100000000 + 900000000, mod2 = rnd() % 100000000 + 900000000;
     while (!isPrime(mod1)) mod1++;        
@@ -34,7 +35,6 @@ void randomize() { // Randomize the mod and base
 struct Hash {
     string s;
     int n = 0;
-    ll invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
     vector<pair<ll, ll>> sHash, pPow, invpPow;
     void setVal(string& S) { // Set the string
         s = S, n = S.size();
