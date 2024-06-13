@@ -21,24 +21,23 @@ bool isPrime(ll n) {
     for (ll i = 5; i * i <= n; i += 6) if (n % i == 0 || n % (i + 2) == 0) return false;
     return true;
 }
+ll mod1 = 127657753, mod2 = 987654319, p1 = 31, p2 = 37;
+void randomize() { // Randomize the mod and base
+    mod1 = rnd() % 100000000 + 900000000, mod2 = rnd() % 100000000 + 900000000;
+    while (!isPrime(mod1)) mod1++;        
+    while (!isPrime(mod2) || mod1 == mod2) mod2++;
+    p1 = rnd() % 100 + 31, p2 = rnd() % 100 + 37;
+    while (!isPrime(p1)) p1++;
+    while (!isPrime(p2) || p1 == p2) p2++;
+    invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
+}
 struct Hash {
     string s;
     int n = 0;
-    ll mod1 = 127657753, mod2 = 987654319;
-    ll p1 = 31, p2 = 37;
     ll invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
     vector<pair<ll, ll>> sHash, pPow, invpPow;
     void setVal(string& S) { // Set the string
         s = S, n = S.size();
-    }
-    void randomize() { // Randomize the mod and base
-        mod1 = rnd() % 100000000 + 900000000, mod2 = rnd() % 100000000 + 900000000;
-        while (!isPrime(mod1)) mod1++;        
-        while (!isPrime(mod2) || mod1 == mod2) mod2++;
-        p1 = rnd() % 100 + 31, p2 = rnd() % 100 + 37;
-        while (!isPrime(p1)) p1++;
-        while (!isPrime(p2) || p1 == p2) p2++;
-        invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
     }
     void genP() { // Generate powers of p and invp for faster queries
         pPow.resize(n + 1, {1, 1});
@@ -66,20 +65,17 @@ struct Hash {
         return getHash(0, n - 1);
     }
     void doAll(string& S) {
-        setVal(S), randomize(), genP(), genHash();
+        setVal(S), genP(), genHash();
     }
 };
 
 int32_t main()
 {
     ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    randomize(); // Randomize the mod and base
     string s;
     cin >> s;
     Hash h; // Create a hash object
-    // h.setVal(s); // Set the string
-    // h.randomize(); // Randomize the mod and base
-    // h.genP(); // Generate the powers
-    // h.genHash(); // Generate the hash
     h.doAll(s);
     cout << h.getHash().xx << ' ' << h.getHash().yy << '\n'; // Get the hash of the whole string
     return 0;    
