@@ -54,19 +54,9 @@ int32_t main()
 	// Demo Operations
 	cout << sTree.query(0, 5) << "\n";
     cout << sTree.query(2, 5) << "\n";
-	cout << sTree.query(4, 5) << "\n";
-	cout << sTree.query(1, 4) << "\n";
-	sTree.updateNode(3, -9);
 	sTree.updateNode(1, -11);
 	cout << sTree.query(0, 0) << "\n";
-	cout << sTree.query(1, 4) << "\n";
+	cout << sTree.query(4) << "\n";
 	sTree.updateRange(2, 4, 5);
-    for (ll i = 0; i < 6; i++)
-		cout << sTree.query(i) << "\n";
-	sTree.updateRange(0, 5, 1);
-    for (ll i = 0; i < 6; i++)
-		cout << sTree.query(i) << "\n";
-	sTree.updateNode(4, -11);
-	sTree.updateRange(2, 5, 5);
     return 0;
 }
