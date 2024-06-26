@@ -13,10 +13,7 @@ struct SumSeg {
         buildTree(a, index << 1, s, m), buildTree(a, (index << 1) + 1, m + 1, e);
         tree[index] = tree[index << 1] + tree[(index << 1) + 1];
     }
-
-    // Returns the sum of elements in range [l, r]
     ll query(ll l, ll r) { return query(1, 0, n - 1, l, r); }
-    // Returns the value of the node at position pos
     ll query(ll pos) { return query(pos, pos);}
     ll query(ll index, ll s, ll e, ll l, ll r) {
         if (l > e || s > r) return 0;
@@ -24,22 +21,12 @@ struct SumSeg {
         ll m = (s + e) >> 1;
         return query(index << 1, s, m, l, r) + query((index << 1) + 1, m + 1, e, l, r);
     }
-    // Update the value of a node at position pos to val
     void updateNode(ll pos, ll val) { updateNode(1, 0, n - 1, pos, val); }
     void updateNode(ll index, ll s, ll e, ll pos, ll val) {
         if (pos < s || pos > e) return;
         if (s == e) { tree[index] = val; return; }
         ll m = (s + e) >> 1;
         updateNode(index << 1, s, m, pos, val), updateNode((index << 1) + 1, m + 1, e, pos, val);
-        tree[index] = tree[index << 1] + tree[(index << 1) + 1];
-    }
-    // Increment all elements in range [l, r] by incr
-    void updateRange(ll l, ll r, ll incr) { updateRange(1, 0, n - 1, l, r, incr); }
-    void updateRange(ll index, ll s, ll e, ll l, ll r, ll incr) {
-        if (s > r || e < l) return;
-        if (s == e) { tree[index] += incr; return; }
-        ll m = (s + e) >> 1;
-        updateRange(index << 1, s, m, l, r, incr), updateRange((index << 1) + 1, m + 1, e, l, r, incr);
         tree[index] = tree[index << 1] + tree[(index << 1) + 1];
     }
 };
@@ -57,6 +44,5 @@ int32_t main()
 	sTree.updateNode(1, -11);
 	cout << sTree.query(0, 0) << "\n";
 	cout << sTree.query(4) << "\n";
-	sTree.updateRange(2, 4, 5);
     return 0;
 }
