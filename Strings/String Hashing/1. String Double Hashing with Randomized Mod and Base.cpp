@@ -24,12 +24,12 @@ bool isPrime(ll n) {
 ll mod1 = 127657753, mod2 = 987654319, p1 = 31, p2 = 37;
 ll invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
 void randomize() { // Randomize the mod and base
-    mod1 = rnd() % 100000000 + 900000000, mod2 = rnd() % 100000000 + 900000000;
-    while (!isPrime(mod1)) mod1++;        
-    while (!isPrime(mod2) || mod1 == mod2) mod2++;
-    p1 = rnd() % 100 + 31, p2 = rnd() % 100 + 37;
-    while (!isPrime(p1)) p1++;
-    while (!isPrime(p2) || p1 == p2) p2++;
+    mod1 = (rnd() % 100000000 + 900000000) | 1, mod2 = (rnd() % 100000000 + 900000000) | 1;
+    while (!isPrime(mod1)) mod1 += 2;        
+    while (!isPrime(mod2) || mod1 == mod2) mod2 += 2;
+    p1 = (rnd() % 100 + 31) | 1, p2 = (rnd() % 100 + 37) | 1;
+    while (!isPrime(p1)) p1 += 2;
+    while (!isPrime(p2) || p1 == p2) p2 += 2;
     invp1 = modpow(p1, mod1 - 2, mod1), invp2 = modpow(p2, mod2 - 2, mod2);
 }
 struct Hash {
