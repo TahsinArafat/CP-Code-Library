@@ -33,7 +33,7 @@ void randomize() {
     invp1 = ModPow(p1, mod1 - 2, mod1), invp2 = ModPow(p2, mod2 - 2, mod2);
 }
 void genP(ll n) {
-    while (pPow.size() <= n) {
+    while ((ll)pPow.size() <= n) {
         pPow.push_back({pPow.back().xx * p1 % mod1, pPow.back().yy * p2 % mod2});
         iPow.push_back({iPow.back().xx * invp1 % mod1, iPow.back().yy * invp2 % mod2});
     }
