@@ -5,7 +5,8 @@ using namespace std;
 struct SumSeg {
     vector<ll> tree;
     ll n = 0;
-    void doAll(vector<ll>& a) { n = a.size(); tree.resize(4 * n + 1); buildTree(a, 1, 0, n - 1); }
+    SumSeg(vector<ll>& a) { n = a.size(); tree.assign(4 * n + 1, 0); buildTree(a, 1, 0, n - 1); }
+    SumSeg(ll n) { tree.assign(4 * n + 1, 0); }
     void buildTree(vector<ll>& a, ll index, ll s, ll e) {
         if (s > e) return;
         if (s == e) { tree[index] = a[s]; return; }
@@ -35,8 +36,7 @@ int32_t main()
 {
     ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
     vector<ll> a = { 1, 3, 2, -2, 4, 5 };
-    SumSeg sTree;
-	sTree.doAll(a);
+    SumSeg sTree(a);
 
 	// Demo Operations
 	cout << sTree.query(0, 5) << "\n";
