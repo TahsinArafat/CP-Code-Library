@@ -54,7 +54,7 @@ struct Hash {
         return {h1, h2}; // 0-indexed
     }
     pair<ll, ll> getHash() {
-        return getHash(0, n - 1); // Get the hash of the whole string
+        return sHash[n]; // Get the hash of the whole string
     }
     Hash(string& s) {
         n = s.size();
