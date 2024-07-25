@@ -39,10 +39,9 @@ void genP(ll n) {
     }
 }
 struct Hash {
-    string s;
     int n = 0;
     vector<pair<ll, ll>> sHash;
-    void genHash() {
+    void genHash(string& s) {
         sHash.resize(n + 1, {0, 0}); // 0-indexed
         for (int i = 0; i < n; i++) {
             sHash[i + 1].xx = (sHash[i].xx + (s[i] - 'a' + 1) * pPow[i].xx) % mod1;
@@ -57,9 +56,9 @@ struct Hash {
     pair<ll, ll> getHash() {
         return getHash(0, n - 1); // Get the hash of the whole string
     }
-    Hash(string& S) {
-        s = S, n = S.size();
-        genP(n), genHash();
+    Hash(string& s) {
+        n = s.size();
+        genP(n), genHash(s);
     }
 };
 
