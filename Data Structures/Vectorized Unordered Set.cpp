@@ -2,6 +2,10 @@
 // Supported range of elements: [0, N]
 // Space Complexity: O(N)
 // Time Complexity: for inserting/erasing/checking/accessing_last_inserted_valid_element O(1) on average, for building O(N)
+
+// Insertion is once at a time, (only can be inserted if not present now)
+// I am gonna update multiple time insertion in future
+
 struct node {
     node *l, *r;
     node() { l = r = nullptr; }
