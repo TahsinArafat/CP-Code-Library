@@ -1,109 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
+#define int ll
 
-void buildTree(int *tree,int *a,int index,int s,int e)
-{
-	if(s>e)
-		return ;
-	if(s==e)
-	{
-		tree[index]=a[s];
-		return ;
-	}
-	int m = (s+e)/2;
-	buildTree(tree,a,2*index,s,m);
-	buildTree(tree,a,2*index+1,m+1,e);
-	tree[index] = tree[2*index]+tree[2*index+1];
-}
+struct LazySegmentTree {
+    vector<int> tree, lazy;
+    ll n;
+    LazySegmentTree(vector<int>& a) { n = a.size(), tree.assign(4 * n + 1, 0), lazy.assign(4 * n + 1, 0), buildTree(a, 1, 0, n - 1); }
+    LazySegmentTree(ll n) { this->n = n, tree.assign(4 * n + 1, 0), lazy.assign(4 * n + 1, 0); }
+    void buildTree(vector<int>& a, ll index, ll s, ll e)
+    {
+        if (s > e)
+            return;
+        if (s == e) {
+            tree[index] = a[s];
+            return;
+        }
+        ll m = (s + e) >> 1;
+        buildTree(a, index << 1, s, m), buildTree(a, (index << 1) | 1, m + 1, e);
+        tree[index] = tree[index << 1] + tree[(index << 1) | 1];
+    }
+    void updateRange(ll rs, ll re, ll inc) { updateRange(1, 0, n - 1, rs, re, inc); }
+    void updateRange(ll index, ll s, ll e, ll rs, ll re, ll inc)
+    {
+        if (lazy[index] != 0) {
+            tree[index] += (e - s + 1) * lazy[index];
+            if (s != e)
+                lazy[index << 1] += lazy[index], lazy[(index << 1) | 1] += lazy[index];
+            lazy[index] = 0;
+        }
 
-void updateNode(int *tree,int index,int s,int e,int pos,int val)
-{
-	if(pos<s || pos>e)
-		return ;
-	if(s==e)
-	{
-		tree[index] = val;
-		return ;
-	}
-	int m = (s+e)/2;
-	updateNode(tree,2*index,s,m,pos,val);
-	updateNode(tree,2*index+1,m+1,e,pos,val);
-	tree[index] = tree[2*index]+tree[2*index+1];
-	return;
-}
+        if (s > e || s > re || e < rs)
+            return;
 
-void updateRange(int *tree,int *lazy,int index,int s,int e,int rs,int re,int inc)
-{
-	if(lazy[index]!=0)
-	{
-		tree[index] += (e-s+1)*lazy[index];
-		if(s!=e)
-		{
-			lazy[2*index] += lazy[index];
-			lazy[2*index+1] += lazy[index];
-		}
-		lazy[index]=0;
-	}
+        if (s >= rs && e <= re) {
+            tree[index] += (e - s + 1) * inc;
+            if (s != e)
+                lazy[index << 1] += inc, lazy[(index << 1) | 1] += inc;
+            return;
+        }
 
-	if(s>e || s>re || e<rs)
-		return;
+        ll m = (s + e) >> 1;
+        updateRange(index << 1, s, m, rs, re, inc), updateRange((index << 1) | 1, m + 1, e, rs, re, inc);
+        tree[index] = tree[index << 1] + tree[(index << 1) | 1];
+    }
+    ll query(ll rs, ll re) { return query(1, 0, n - 1, rs, re); }
+    ll query(ll index, ll s, ll e, ll rs, ll re)
+    {
+        if (lazy[index] != 0) {
+            tree[index] += (e - s + 1) * lazy[index];
+            if (s != e)
+                lazy[index << 1] += lazy[index], lazy[(index << 1) | 1] += lazy[index];
+        }
+        lazy[index] = 0;
+        if (s > e || s > re || e < rs)
+            return 0;
+        if (s >= rs && e <= re)
+            return tree[index];
+        ll m = (s + e) >> 1, left = query(index << 1, s, m, rs, re), right = query((index << 1) | 1, m + 1, e, rs, re);
+        return left + right;
+    }
+};
 
-	if(s>=rs && e<=re)
-	{
-		tree[index] += (e-s+1)*inc;
-		if(s!=e)
-		{
-			lazy[2*index]+=inc;
-			lazy[2*index+1] +=inc;
-		}
-		return;
-	}
-
-	int m= (s+e)/2;
-	updateRange(tree,lazy,2*index,s,m,rs,re,inc);
-	updateRange(tree,lazy,2*index+1,m+1,e,rs,re,inc);
-	tree[index] = tree[2*index]+tree[2*index+1];
-}
-
-int query(int *tree,int *lazy,int index,int s,int e,int rs,int re)
-{
-	if(lazy[index]!=0)
-	{
-		tree[index] += (e-s+1)*lazy[index];
-		if(s!=e)
-		{
-			lazy[2*index] += lazy[index];
-			lazy[2*index+1] += lazy[index];
-		}
-		lazy[index]=0;
-	}
-
-	if(s>e || s>re || e<rs)
-		return 0;
-	if(s>=rs && e<=re)
-		return tree[index];
-	int m= (s+e)/2;
-	int left=query(tree,lazy,2*index,s,m,rs,re);
-	int right = query(tree,lazy,2*index+1,m+1,e,rs,re);
-	return (left+right);
-
-}
-int main()
+int32_t main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int a[6]={1,3,5,7,9,11};
-    int n =6;
-    int s=0,e=n-1,index=1;
-    int *tree = new int[4*n+1];
-    int *lazy = new int[4*n+1];
-    buildTree(tree,a,index,s,e);
-    cout<<query(tree,lazy,index,s,e,3,5)<<endl;
-    updateRange(tree,lazy,index,s,e,2,5,10);
-    cout<<query(tree,lazy,index,s,e,3,5)<<endl;
-    cout<<query(tree,lazy,index,s,e,4,4)<<endl;
-    updateRange(tree,lazy,index,s,e,1,4,3);
-    for(int i=0;i<6;i++)
-    	cout<<query(tree,lazy,index,s,e,i,i)<<endl;
+
+    vector<int> a = { 1, 3, 5, 7, 9, 11 };
+    LazySegmentTree segTree(a);
+
+    cout << segTree.query(3, 5) << endl;
+    segTree.updateRange(2, 5, 10);
+    cout << segTree.query(3, 5) << endl;
+    cout << segTree.query(4, 4) << endl;
+    segTree.updateRange(1, 4, 3);
+    for (ll i = 0; i < 6; i++) {
+        cout << segTree.query(i, i) << endl;
+    }
     return 0;
 }
