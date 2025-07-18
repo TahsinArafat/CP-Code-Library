@@ -20,7 +20,8 @@ struct MergeSortTree {
         }
         int mid = (l + r) / 2;
         build(node * 2, l, mid), build(node * 2 + 1, mid + 1, r);
-        merge(tree[node * 2].begin(), tree[node * 2].end(), tree[node * 2 + 1].begin(), tree[node * 2 + 1].end(), back_inserter(tree[node]));
+        tree[node].resize(tree[node * 2].size() + tree[node * 2 + 1].size());
+        merge(tree[node * 2].begin(), tree[node * 2].end(), tree[node * 2 + 1].begin(), tree[node * 2 + 1].end(), tree[node].begin());
     }
     int query(int node, int l, int r, int ql, int qr, int k)
     {
