@@ -26,7 +26,7 @@ struct UnionFind {
         int x = findSet(i), y = findSet(j);
         if (rank[x] > rank[y])
             swap(x, y);
-        p[x] = y; // Shorter tree x's items will be moved to y
+        p[x] = y;
         if (rank[x] == rank[y])
             ++rank[y];
         setSize[y] += setSize[x];
